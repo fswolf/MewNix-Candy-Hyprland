@@ -1,0 +1,164 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+
+  "logo": {
+    "type": "file",
+    "source": "~/.config/fastfetch/catgirl.txt",
+    "padding": {
+      "top": 1,
+      "left": 2,
+      "right": 3
+    },
+    "color": {
+      "1": "38;5;225",
+      "2": "38;5;207",
+      "3": "38;5;213",
+      "4": "38;5;201",
+      "5": "38;5;70",
+      "6": "38;5;204"
+    }
+  },
+
+  "display": {
+    "separator": "  "
+  },
+
+  "modules": [
+
+    {
+      "type": "title",
+      "format": "{#cyan}{user-name-colored}{#white}@{#magenta}{host-name-colored}"
+    },
+    
+    {
+      "type": "custom",
+      "format": "{#cyan}╭─────────────── {#white}HARDWARE {#cyan}───────────────╮"
+    },
+
+    {
+      "type": "host",
+      "key": "{#cyan}│ {#magenta}󰌢  PC"
+    },
+
+    {
+      "type": "cpu",
+      "key": "{#cyan}│ {#magenta}󰻠  CPU"
+    },
+
+    {
+      "type": "gpu",
+      "key": "{#cyan}│ {#magenta}󰍛  GPU"
+    },
+
+    {
+      "type": "memory",
+      "key": "{#cyan}│ {#magenta}󰑭  RAM"
+    },
+
+    {
+      "type": "disk",
+      "key": "{#cyan}│ {#magenta}󰋊  Disk",
+      "folders": ["/"]
+    },
+
+    {
+      "type": "custom",
+      "format": "{#cyan}╰────────────────────────────────────────╯"
+    },
+
+    "break",
+
+    {
+      "type": "custom",
+      "format": "{#magenta}╭─────────────── {#white}SOFTWARE {#magenta}───────────────╮"
+    },
+
+    {
+      "type": "os",
+      "key": "{#magenta}│ {#38;5;213}󰣇  OS",
+      "format": "{name} {version-id}"
+    },
+
+    {
+      "type": "kernel",
+      "key": "{#magenta}│ {#38;5;213}󰌽  Kernel"
+    },
+
+    {
+      "type": "packages",
+      "key": "{#magenta}│ {#38;5;213}󰏖  Packages"
+    },
+
+    {
+      "type": "shell",
+      "key": "{#magenta}│ {#38;5;213}󰆍  Shell"
+    },
+
+    {
+      "type": "de",
+      "key": "{#magenta}│ {#38;5;213}󰧨  DE",
+    },
+
+    {
+      "type": "wm",
+      "key": "{#magenta}│ {#38;5;213}󰖯  WM"
+    },
+
+    {
+      "type": "theme",
+      "key": "{#magenta}│ {#38;5;213}󰉼  Theme",
+      "format": "MewNix Candy"
+    },
+
+    {
+      "type": "terminal",
+      "key": "{#magenta}│ {#38;5;213}󰆍  Terminal"
+    },
+
+    {
+      "type": "custom",
+      "format": "{#magenta}╰────────────────────────────────────────╯"
+    },
+
+    "break",
+
+    {
+      "type": "custom",
+      "format": "{#blue}╭────────────── {#white}SYSTEM INFO {#blue}──────────────╮"
+    },
+
+    {
+      "type": "uptime",
+      "key": "{#blue}│ {#cyan}󰔟  Uptime"
+    },
+
+    {
+      "type": "display",
+      "key": "{#blue}│ {#cyan}󰍹  Display", 
+      "format": "{width}x{height} @ {refresh-rate}Hz"
+    },
+
+    {
+      "type": "localip",
+      "key": "{#blue}│ {#cyan}󰩟  Local IP"
+    },
+
+    {
+      "type": "locale",
+      "key": "{#blue}│ {#cyan}󰗊  Locale"
+    },
+
+    {
+      "type": "custom",
+      "format": "{#blue}╰─────────────────────────────────────────╯"
+    },
+
+    "break",
+
+    {
+      "type": "colors",
+      "symbol": "circle",
+      "paddingLeft": 4
+    }
+  ]
+}

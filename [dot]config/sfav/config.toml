@@ -1,0 +1,90 @@
+# ~/.config/sfav/config.toml
+# sfav looks here by default, or pass a path as the first arg: `sfav ./myconfig.toml`
+
+# [theme] is optional — omit it entirely to get these defaults.
+# Colors are "#rrggbb" hex strings.
+[theme]
+border = "#b48cff"      
+header = "#b48cff"
+highlight_bg = "#463764"
+highlight_fg = "#ffffff"
+
+[[entries]]
+name = "Update"
+command = "sudo dnf update -y"
+notes = "Full system update"
+
+[[entries]]
+name = "Update Snap"
+command = "sudo snap refresh"
+notes = "Update snap packages, snap was removed from discover because of bugs."
+
+[[entries]]
+name = "Rice reload"
+command = "hyprctl reload"
+notes = "Reload hyprland config"
+
+[[entries]]
+name = "Waybar reload"
+command = "killall waybar; setsid -f waybar -c ~/.config/waybar/config-main >/dev/null 2>&1 & setsid -f waybar -c ~/.config/waybar/config-side >/dev/null 2>&1 &"
+notes = "Reload waybar with config"
+
+[[entries]]
+name = "Audio Setting"
+command = "wiremix"
+notes = "Audio manager"
+
+[[entries]]
+name = "Monitor Setting"
+command = "hyprmoncfg"
+notes = "Monitor config TUI, for hyprland"
+
+[[entries]]
+name = "Bluetooth"
+command = "bluetui"
+notes = "Terminal based bluetooth manager"
+
+[[entries]]
+name = "ComfyUI"
+command = "source ~/comfyui-venv/bin/activate && comfy launch"
+notes = "ComfyUI image generator"
+
+[[entries]]
+name = "VoicePipeLine"
+command = "source ~/ai-voice-venv/bin/activate && python ~/ai-voice/voice_loop_kokoro.py"
+notes = "Streaming voice pipe line experemental doesnt work great"
+
+[[entries]]
+name = "Luna AI"
+command = "source ~/ai-voice-venv/bin/activate && python ~/ai-voice/main.py"
+notes = "Launch AI voice assistant broken on hyprland"
+
+[[entries]]
+name = "Music Player"
+command = "ncmpcpp"
+notes = "Mp3 Player control center"
+
+[[entries]]
+name = "Lava Lamp"
+command = "lavat -g -c c084fc -k f472b6 -G -R 2 -b 10 -r 9"
+notes = "Lava Lamp slow to fast movement with pink accents"
+
+[[entries]]
+name = "Visualizer"
+command = "cava"
+notes = "Audio Visualizer for audio pipe line"
+
+[[entries]]
+name = "File Browser"
+command = "yazi"
+notes = "File browser writen in rust"
+
+[[entries]]
+name = "Bonzi Tree"
+command = "cbonsai"
+notes = "Terminal growing bomzi tree"
+
+[[entries]]
+name = "Mako Test"
+command = "notify-send -u normal \"Test Title\" \"This is a test notification\""
+notes = "Test Mako message demon"

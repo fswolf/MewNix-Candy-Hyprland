@@ -1,0 +1,78 @@
+# ============================================================
+# MAKO — Purple / Pink Waybar Theme
+# ============================================================
+
+# --- Global ---
+font=JetBrainsMono Nerd Font 11
+
+background-color=#1a1525f5
+text-color=#e8e0f0
+
+width=380
+height=100
+
+padding=12
+margin=4
+outer-margin=4
+
+border-size=2
+border-radius=14
+border-color=#8b5cf6
+
+anchor=bottom-right
+
+default-timeout=8000
+max-visible=4
+
+icons=1
+icon-location=left
+max-icon-size=42
+icon-path=/usr/share/icons/Adwaita:/usr/share/icons/hicolor:/usr/share/icons/breeze:/usr/share/icons/breeze-dark:/usr/share/pixmaps
+
+markup=1
+actions=1
+
+# Keep newest notifications at the top
+sort=-time
+
+# Progress bar
+progress-color=over #c084fc
+
+
+# ============================================================
+# NORMAL
+# ============================================================
+
+[urgency=normal]
+background-color=#1a1525f5
+text-color=#e8e0f0
+border-color=#8b5cf6
+border-size=2
+
+
+# ============================================================
+# LOW
+# ============================================================
+
+[urgency=low]
+background-color=#171321f5
+text-color=#c4b5fd
+border-color=#7c3aed
+border-size=1
+
+
+# ============================================================
+# CRITICAL
+# ============================================================
+
+[urgency=critical]
+background-color=#241522f8
+text-color=#ffffff
+
+border-color=#f472b6
+border-size=3
+border-radius=14
+
+default-timeout=0
+
+progress-color=over #f472b6

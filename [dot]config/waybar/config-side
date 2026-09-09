@@ -1,0 +1,45 @@
+{
+    "output": "HDMI-A-1",
+    "layer": "top",
+    "position": "top",
+    "height": 36,
+
+    "modules-left": [
+        "custom/paw",
+        "hyprland/workspaces",
+        "custom/new-workspace"
+    ],
+
+    "modules-center": [
+        "clock"
+    ],
+
+    "modules-right": [
+        "tray"
+    ],
+
+    "custom/paw": {
+        "format": " ",
+        "tooltip": false,
+        "interval": "once",
+        "on-click": "fuzzel"
+    },
+
+    "custom/new-workspace": {
+        "format": "+",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"r+1\" })'"
+    },
+
+    "clock": {
+        "format": "󰥔 {:%I:%M %p %a %d %b}",
+        "on-click": "toggle-float calcurse-float 'kitty --class calcurse-float -e calcurse'",
+        "tooltip": false
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 4,
+        "show-passive-items": true
+    }
+}

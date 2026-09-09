@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CLASS="$1"
+CMD="$2"
+
+if hyprctl clients -j | jq -e ".[] | select(.class == \"$CLASS\")" > /dev/null; then
+    hyprctl dispatch "hl.dsp.window.close({ window = \"class:$CLASS\" })"
+else
+    eval "$CMD"
+fi

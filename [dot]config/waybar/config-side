@@ -2,7 +2,7 @@
     "output": "HDMI-A-1",
     "layer": "top",
     "position": "top",
-    "height": 36,
+    "height": 28,
 
     "modules-left": [
         "custom/paw",
@@ -32,7 +32,7 @@
     },
 
     "clock": {
-        "format": "󰥔 {:%I:%M %p %a %d %b}",
+        "format": "{:%I:%M %p %a %d %b}",
         "on-click": "toggle-float calcurse-float 'kitty --class calcurse-float -e calcurse'",
         "tooltip": false
     },

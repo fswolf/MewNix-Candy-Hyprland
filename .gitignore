@@ -1,0 +1,10 @@
+# Editor and desktop scratch files
+*~
+*.swp
+*.swo
+.DS_Store
+.Trash-*/
+
+# Local theme rollback copies
+backup-*/
+*.before-*

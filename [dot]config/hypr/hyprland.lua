@@ -35,7 +35,7 @@ hl.monitor({
     mode      = "1920x1080",
     position  = "1920x0",
     scale     = 1,
-    transform = 1 
+    transform = 1
 })
 
 ---------------------
@@ -57,7 +57,7 @@ local menu        = "wofi --show drun -I"
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
 --
- hl.on("hyprland.start", function () 
+ hl.on("hyprland.start", function ()
     hl.exec_cmd("waypaper --restore")
 --    hl.exec_cmd("hyprpaper")
     hl.exec_cmd("waybar -c ~/.config/waybar/config-main")
@@ -66,22 +66,25 @@ local menu        = "wofi --show drun -I"
     hl.exec_cmd("hyprmoncfgd")
     hl.exec_cmd("mako")
 
-    hl.exec_cmd("nm-applet")
-    
---    hl.exec_cmd("hypridle")
-    hl.exec_cmd("swayidle -d -w")
-    
+    hl.exec_cmd("hypridle")
+    --hl.exec_cmd("swayidle -d -w")
+
+    hl.exec_cmd("hyprsunset")
+
 --    hl.exec_cmd(terminal)
 --    hl.exec_cmd(terminal, { workspace = "2 silent" })
 
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP && systemctl --user start hyprland-session.target")
-    
+
     hl.exec_cmd("/usr/libexec/xdg-desktop-portal-hyprland")
     hl.exec_cmd("/usr/libexec/xdg-desktop-portal")
 
 --  Plasma automount
-    hl.exec_cmd("kded6")  
-    hl.exec_cmd("kwalletd5") 
+    hl.exec_cmd("kded6")
+
+    hl.exec_cmd("kwalletd6")
+
+    hl.exec_cmd("sleep 3 && nm-applet --indicator")
  end)
 
 
@@ -130,7 +133,7 @@ hl.config({
         border_size = 2,
 
         col = {
-            active_border   = { 
+            active_border   = {
             colors = {
                 "rgba(8b6faeee)",
                 "rgba(c084f588)"
@@ -251,18 +254,14 @@ hl.config({
     misc = {
         force_default_wallpaper = 0,    -- Set to 0 or 1 to disable the anime mascot wallpapers
         disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background. :(
-    },
-})
 
-hl.config({
-    misc = {
         mouse_move_enables_dpms = true,
         key_press_enables_dpms = true,
         disable_autoreload = false,
-    }
+    },
 })
 
--- this fucks with games dont do it 
+-- this fucks with games dont do it
 --hl.config({
 --    xwayland = {
 --        force_zero_scaling = true
@@ -388,6 +387,18 @@ hl.bind("SUPER + Print", function()
     ))
 end)
 
+-- SUPER + SHIFT + Print Screen = active window only
+hl.bind("SUPER + SHIFT + Print", function()
+    hl.dispatch(hl.dsp.exec_cmd([[
+        geom=$(hyprctl activewindow -j | jq -r 'if .at and .size then "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])" else empty end')
+        if [ -n "$geom" ]; then
+            mkdir -p /home/ryan/Pictures/Screenshots
+            shot=/home/ryan/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S').png
+            grim -g "$geom" "$shot" && wl-copy < "$shot"
+        fi
+    ]]))
+end)
+
 hl.bind("SUPER + L", function() hl.dispatch(hl.dsp.exec_cmd("hyprlock")) end)
 
 hl.bind("SUPER + N", function()
@@ -398,23 +409,21 @@ end)
 hl.bind("SUPER + G", function() hl.dispatch(hl.dsp.exec_cmd(terminal .. " -e yazi")) end)
 hl.bind("SUPER + T", function() hl.dispatch(hl.dsp.exec_cmd(terminal .. " -e sshs")) end)
 
+local dimmed = false
+
 hl.bind(mainMod .. " + Z", function()
-    local monitors = hl.monitors()
-    local any_off = false
-
-    for _, mon in ipairs(monitors) do
-        if mon.dpmsStatus == false then
-            any_off = true
-            break
-        end
-    end
-
-    if any_off then
-        hl.dispatch(hl.dsp.dpms({ action = "on" }))
+    if dimmed then
+        hl.exec_cmd("hyprctl hyprsunset gamma 100")  -- normal
+        dimmed = false
     else
-        hl.dispatch(hl.dsp.dpms({ action = "off" }))
+        hl.exec_cmd("hyprctl hyprsunset gamma 15")   -- very dim
+        dimmed = true
     end
 end, { locked = true })
+
+hl.bind(mainMod .. " + X", function()
+    hl.exec_cmd("killall -SIGUSR1 waybar")
+end)
 
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
@@ -424,9 +433,8 @@ end, { locked = true })
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
 -- Example window rules that are useful
-
 local suppressMaximizeRule = hl.window_rule({
-    -- Ignore maximize requests from all apps. 
+    -- Ignore maximize requests from all apps.
     name  = "suppress-maximize-events",
     match = { class = ".*" },
 
@@ -439,7 +447,7 @@ hl.window_rule({
     name  = "fix-xwayland-drags",
     match = {
         class      = "^$",
-        title      = "^$", 
+        title      = "^$",
         xwayland   = true,
         float      = true,
         fullscreen = false,
@@ -447,6 +455,11 @@ hl.window_rule({
     },
 
     no_focus = true,
+})
+
+hl.window_rule({
+    match   = { class = "org.kde.dolphin" },
+    opacity = "0.85 0.85"
 })
 
 -- Messes with some games
@@ -466,7 +479,7 @@ hl.window_rule({
         class = "^calcurse-float$"
     },
     float = true,
-    size = { 900, 600 },  
+    size = { 900, 600 },
     move = { "(monitor_w - 900) / 2", 44 },
     animation = "slide top"
 })
@@ -514,14 +527,18 @@ hl.window_rule({
 -- Steam Rule Set
 ------------------------------------------
 
--- 1. Keep the main Steam client tiled
+-- 1. Force main Steam window to be tiled
 hl.window_rule({
     name = "tile-steam-main",
-    match = { class = "steam", title = "^Steam$" },
+    match = {
+        class = "steam",
+        title = "Steam"
+    },
     float = false,
+    tile = true,          -- force tile
 })
 
--- 3. Float other Steam child windows / popups
+-- 2. Float other Steam windows
 hl.window_rule({
     name = "float-steam-popups",
     match = { class = "steam" },

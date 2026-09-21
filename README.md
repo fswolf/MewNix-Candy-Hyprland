@@ -22,6 +22,16 @@ Copy the complete Waybar directory, including `icons/` and `scripts/`; its CSS r
 
 ## Updating this repository
 
+For a guided sync, open a terminal in this folder and run:
+
+```sh
+bash ./sync.sh
+```
+
+The script checks for remote updates, shows pending files, asks for a commit message, then commits and pushes. It stages all non-ignored changes in this folder, including deletions. Press Ctrl+C at the message prompt to cancel. You can also pass a message directly: `bash ./sync.sh "Update Waybar styling"`.
+
+If GitHub has new commits and you have local changes, it stops so you can reconcile them first. It never force-pushes.
+
 The local theme folder is a Git checkout. After saving theme changes into it:
 
 ```sh

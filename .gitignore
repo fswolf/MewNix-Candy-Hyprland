@@ -8,3 +8,5 @@
 # Local theme rollback copies
 backup-*/
 *.before-*
+
+sync.sh

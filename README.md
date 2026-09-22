@@ -36,4 +36,12 @@ Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positio
 
 These are personal configuration files, rather than an automatic installer. Review the files before copying them into your home directory. Adjust `/home/ryan` paths, monitor names (`DP-1` and `HDMI-A-1`), temperature sensor paths, and application commands for your machine. The included Hyprland configuration uses Lua.
 
-Copy the complete Waybar directory, including `icons/` and `scripts/`; its CSS references the SVG assets. Waybar uses JetBrainsMono Nerd Font. Clicking the utility modules opens terminal applications such as Wiremix, Bluetui, and Calcurse inside Kitty. The included `toggle-float` script lives in `~/.local/bin/` and makes these Kitty utility windows float. Fuzzel provides the application launcher and power menu.
+Copy the complete Waybar directory, including `icons/` and `scripts/`; its CSS references the SVG assets. Waybar uses JetBrainsMono Nerd Font. Fuzzel provides the application launcher and power menu.
+
+## Utility window toggles
+
+The Waybar audio, Bluetooth, and clock buttons toggle Wiremix, Bluetui, and Calcurse in Kitty. Click once to open the utility, then click again to close its window.
+
+The included `toggle-float` script belongs in `~/.local/bin/` and takes a window class and a launch command. It checks for an existing window with that class: if one exists, it closes it; otherwise, it runs the launch command. This lets repeated clicks toggle the utility instead of opening extra copies. The script uses `hyprctl` and `jq`.
+
+Window rules in `[dot]config/hypr/hyprland.lua` match those Kitty window classes and control floating, size, position, and animation. For example, the `calcurse-float` rule creates a 900×600 floating window, centers it horizontally, places it 38 pixels from the top, and applies the `slide top` animation. The `toggle-float` script handles opening and closing; it does not switch windows between tiled and floating modes.

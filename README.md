@@ -2,7 +2,19 @@
 
 A purple-and-rose Hyprland rice with compact Waybar panels, matching SVG status icons, and rounded, flared edges.
 
-![MewNix Candy desktop](screenshot.png)
+## Screenshots
+
+### Desktop and Fastfetch
+
+![MewNix Candy desktop with Waybar and Fastfetch](Docs/screenshot.png)
+
+### Power menu
+
+![MewNix Candy power menu with SVG icons](Docs/screenshot1.png)
+
+### Application launcher
+
+![MewNix Candy application launcher](Docs/screenshot2.png)
 
 ## Included
 

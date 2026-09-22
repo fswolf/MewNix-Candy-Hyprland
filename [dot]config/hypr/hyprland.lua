@@ -35,7 +35,7 @@ hl.monitor({
     mode      = "1920x1080",
     position  = "1920x0",
     scale     = 1,
-    transform = 1
+    transform = 1 
 })
 
 ---------------------
@@ -57,7 +57,7 @@ local menu        = "wofi --show drun -I"
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
 --
- hl.on("hyprland.start", function ()
+ hl.on("hyprland.start", function () 
     hl.exec_cmd("waypaper --restore")
 --    hl.exec_cmd("hyprpaper")
     hl.exec_cmd("waybar -c ~/.config/waybar/config-main")
@@ -65,17 +65,17 @@ local menu        = "wofi --show drun -I"
 
     hl.exec_cmd("hyprmoncfgd")
     hl.exec_cmd("mako")
-
+    
     hl.exec_cmd("hypridle")
     --hl.exec_cmd("swayidle -d -w")
-
+    
     hl.exec_cmd("hyprsunset")
 
 --    hl.exec_cmd(terminal)
 --    hl.exec_cmd(terminal, { workspace = "2 silent" })
 
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP && systemctl --user start hyprland-session.target")
-
+    
     hl.exec_cmd("/usr/libexec/xdg-desktop-portal-hyprland")
     hl.exec_cmd("/usr/libexec/xdg-desktop-portal")
 
@@ -133,7 +133,7 @@ hl.config({
         border_size = 2,
 
         col = {
-            active_border   = {
+            active_border   = { 
             colors = {
                 "rgba(8b6faeee)",
                 "rgba(c084f588)"
@@ -261,7 +261,7 @@ hl.config({
     },
 })
 
--- this fucks with games dont do it
+-- this fucks with games dont do it 
 --hl.config({
 --    xwayland = {
 --        force_zero_scaling = true
@@ -434,7 +434,7 @@ end)
 
 -- Example window rules that are useful
 local suppressMaximizeRule = hl.window_rule({
-    -- Ignore maximize requests from all apps.
+    -- Ignore maximize requests from all apps. 
     name  = "suppress-maximize-events",
     match = { class = ".*" },
 
@@ -447,7 +447,7 @@ hl.window_rule({
     name  = "fix-xwayland-drags",
     match = {
         class      = "^$",
-        title      = "^$",
+        title      = "^$", 
         xwayland   = true,
         float      = true,
         fullscreen = false,
@@ -479,8 +479,8 @@ hl.window_rule({
         class = "^calcurse-float$"
     },
     float = true,
-    size = { 900, 600 },
-    move = { "(monitor_w - 900) / 2", 44 },
+    size = { 900, 600 },  
+    move = { "(monitor_w - 900) / 2", 38 },
     animation = "slide top"
 })
 
@@ -491,7 +491,7 @@ hl.window_rule({
     },
     float = true,
     size = { 600, 400 },
-    move = { 1312, 44 },
+    move = { 1312, 38 },
     animation = "slide top"
 })
 
@@ -502,7 +502,7 @@ hl.window_rule({
     },
     float = true,
     size = { 1000, 400 },
-    move = { 912, 44 },
+    move = { 912, 38 },
     animation = "slide top"
 })
 
@@ -530,9 +530,9 @@ hl.window_rule({
 -- 1. Force main Steam window to be tiled
 hl.window_rule({
     name = "tile-steam-main",
-    match = {
-        class = "steam",
-        title = "Steam"
+    match = { 
+        class = "steam", 
+        title = "Steam" 
     },
     float = false,
     tile = true,          -- force tile

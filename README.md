@@ -16,6 +16,10 @@ A purple-and-rose Hyprland rice with compact Waybar panels, matching SVG status 
 
 ![MewNix Candy application launcher](Docs/screenshot2.png)
 
+### Floating calendar
+
+![Calcurse calendar floating in a Kitty terminal](Docs/screenshot3.png)
+
 ## Included
 
 - 28px Waybar layouts for the main and secondary monitors.

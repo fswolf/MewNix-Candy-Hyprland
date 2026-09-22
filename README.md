@@ -30,4 +30,4 @@ A purple-and-rose Hyprland rice with compact Waybar panels, matching SVG status 
 
 These are personal configuration files, rather than an automatic installer. Review the files before copying them into your home directory. Adjust `/home/ryan` paths, monitor names (`DP-1` and `HDMI-A-1`), temperature sensor paths, and application commands for your machine. The included Hyprland configuration uses Lua.
 
-Copy the complete Waybar directory, including `icons/` and `scripts/`; its CSS references the SVG assets. Waybar uses JetBrainsMono Nerd Font, and some click actions call Kitty, Fuzzel, Wiremix, Bluetui, Calcurse, and `toggle-float`.
+Copy the complete Waybar directory, including `icons/` and `scripts/`; its CSS references the SVG assets. Waybar uses JetBrainsMono Nerd Font. Clicking the utility modules opens terminal applications such as Wiremix, Bluetui, and Calcurse inside Kitty. The included `toggle-float` script lives in `~/.local/bin/` and makes these Kitty utility windows float. Fuzzel provides the application launcher and power menu.

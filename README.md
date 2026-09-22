@@ -16,9 +16,11 @@ A purple-and-rose Hyprland rice with compact Waybar panels, matching SVG status 
 
 ![MewNix Candy application launcher](Docs/screenshot2.png)
 
-### Floating calendar
+### Floating utility windows
 
-![Calcurse calendar floating in a Kitty terminal](Docs/screenshot3.png)
+Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positioning and animations defined in `hyprland.lua`. Calcurse is shown below.
+
+![Calcurse showing the floating utility window layout](Docs/screenshot3.png)
 
 ## Included
 

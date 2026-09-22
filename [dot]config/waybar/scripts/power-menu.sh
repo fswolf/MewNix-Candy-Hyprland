@@ -3,12 +3,15 @@
 # Toggle off if fuzzel is already open
 pkill -x fuzzel && exit 0
 
-options="Lock
-Logout
-Reboot
-Shutdown"
+# Resolve icons relative to this script so the theme remains portable.
+icon_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../icons" && pwd)" || exit 1
 
-chosen=$(printf '%b\n' "$options" | fuzzel --dmenu \
+# Fuzzel's dmenu icon metadata is hidden from the returned choice text.
+chosen=$(printf '%s\0icon\x1f%s\n' \
+    "Lock" "$icon_dir/menu-lock.svg" \
+    "Logout" "$icon_dir/menu-logout.svg" \
+    "Reboot" "$icon_dir/menu-reboot.svg" \
+    "Shutdown" "$icon_dir/menu-shutdown.svg" | fuzzel --dmenu \
     --hide-prompt \
     --lines 4 \
     --width 18 \

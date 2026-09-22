@@ -22,6 +22,8 @@ Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positio
 
 ![Calcurse showing the floating utility window layout](Docs/screenshot3.png)
 
+![Calcurse showing the floating utility window layout](Docs/screenshot4.png)
+
 ## Included
 
 - 28px Waybar layouts for the main and secondary monitors.

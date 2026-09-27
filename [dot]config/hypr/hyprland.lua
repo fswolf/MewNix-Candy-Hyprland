@@ -312,6 +312,16 @@ hl.device({
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
+local menu = os.getenv("HOME") .. "/.config/hypr/scripts/desktop-menu.sh"
+hl.bind("mouse:273", hl.dsp.exec_cmd(menu), { non_consuming = true })
+
+-- Close window with middle mouse check with wev
+hl.bind("mouse:274", hl.dsp.window.close())
+
+-- click outside an open fuzzel menu to dismiss it
+local dismiss = os.getenv("HOME") .. "/.config/hypr/scripts/menu-dismiss.sh"
+hl.bind("mouse:272", hl.dsp.exec_cmd("bash " .. dismiss), { non_consuming = true })
+
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())

@@ -24,6 +24,10 @@ Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positio
 
 ![Calcurse showing the floating utility window layout](Docs/screenshot4.png)
 
+### Right Click Desktop Menu
+
+![MewNix Candy Hyprlock screen](Docs/screenshot6.png)
+
 ### Hyprlock
 
 ![MewNix Candy Hyprlock screen](Docs/screenshot5.png)

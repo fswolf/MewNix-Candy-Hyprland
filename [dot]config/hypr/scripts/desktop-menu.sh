@@ -5,7 +5,6 @@ set -u
 pkill -x fuzzel && exit 0
 
 BAR_H=40                                  # waybar height; clicks above are ignored
-MENU_CFG="$HOME/.config/fuzzel/menu.ini"
 ICONS="$HOME/.config/waybar/icons"
 
 read -r cx cy < <(hyprctl cursorpos | tr -d ',')
@@ -30,19 +29,19 @@ read -r mx my mw mh < <(hyprctl monitors -j | jq -r --argjson x "$cx" --argjson 
       | "\(.x) \(.y) \(.width / .scale | floor) \(.height / .scale | floor)"')
 : "${mx:=0}" "${my:=0}" "${mw:=1920}" "${mh:=1080}"
 
-MW=200 MH=170
+MW=240 MH=150
 px=$(( cx - mx )); py=$(( cy - my ))
 (( px + MW > mw )) && px=$(( mw - MW ))
 (( py + MH > mh )) && py=$(( mh - MH ))
 (( px < 0 )) && px=0
 (( py < 0 )) && py=0
 
-opts=( --dmenu --anchor=top-left --x-margin="$px" --y-margin="$py" )
-[[ -f $MENU_CFG ]] && opts+=( --config="$MENU_CFG" )
+# no --config: inherit ~/.config/fuzzel/fuzzel.ini so this matches the power menu
+opts=( --dmenu --width 18 --lines 5 --anchor=top-left --x-margin="$px" --y-margin="$py" )
 if fuzzel --help 2>&1 | grep -q -- --hide-prompt; then
-  opts+=( --hide-prompt --minimal-lines --selection-radius=6 )
+  opts+=( --hide-prompt )
 else
-  opts+=( -l 5 -w 16 -p '' )
+  opts+=( -p '' )
 fi
 
 menu_items() {
@@ -56,7 +55,7 @@ menu_items() {
 
 case $(menu_items | fuzzel "${opts[@]}") in
   Terminal)  kitty & ;;
-  Files)     dolphine & ;;
+  Files)     dolphin & ;;
   Wallpaper) waypaper & ;;
   Displays)  kitty hyprmoncfg & ;;
   Reload)    hyprctl reload ;;

@@ -4,7 +4,6 @@ set -u
 # toggle off if a fuzzel menu is already open
 pkill -x fuzzel && exit 0
 
-BAR_H=40                                  # waybar height; clicks above are ignored
 ICONS="$HOME/.config/waybar/icons"
 
 read -r cx cy < <(hyprctl cursorpos | tr -d ',')
@@ -21,7 +20,16 @@ over=$(hyprctl clients -j | jq --argjson x "$cx" --argjson y "$cy" --argjson v "
   ] | length')
 
 (( over > 0 )) && exit 0
-(( cy < BAR_H )) && exit 0
+
+# ignore clicks landing on any top/overlay layer surface: waybar, tray menus,
+# notifications. Levels 0/1 are skipped so the wallpaper doesn't block us.
+onlayer=$(hyprctl layers -j | jq --argjson x "$cx" --argjson y "$cy" '
+  [ .[].levels | to_entries[]
+    | select((.key | tonumber) >= 2) | .value[]
+    | select(.w > 0 and .h > 0)
+    | select($x >= .x and $x < (.x + .w) and $y >= .y and $y < (.y + .h))
+  ] | length')
+(( onlayer > 0 )) && exit 0
 
 read -r mx my mw mh < <(hyprctl monitors -j | jq -r --argjson x "$cx" --argjson y "$cy" '
   .[] | select($x >= .x and $x < (.x + (.width / .scale)) and
@@ -30,7 +38,8 @@ read -r mx my mw mh < <(hyprctl monitors -j | jq -r --argjson x "$cx" --argjson 
 : "${mx:=0}" "${my:=0}" "${mw:=1920}" "${mh:=1080}"
 
 MW=240 MH=150
-px=$(( cx - mx )); py=$(( cy - my ))
+OFF_X=0 OFF_Y=-40                         # nudge menu relative to the cursor
+px=$(( cx - mx + OFF_X )); py=$(( cy - my + OFF_Y ))
 (( px + MW > mw )) && px=$(( mw - MW ))
 (( py + MH > mh )) && py=$(( mh - MH ))
 (( px < 0 )) && px=0
@@ -55,7 +64,7 @@ menu_items() {
 
 case $(menu_items | fuzzel "${opts[@]}") in
   Terminal)  kitty & ;;
-  Files)     dolphin & ;;
+  Files)     dolphine & ;;
   Wallpaper) waypaper & ;;
   Displays)  kitty hyprmoncfg & ;;
   Reload)    hyprctl reload ;;

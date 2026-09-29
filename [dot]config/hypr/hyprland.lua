@@ -316,12 +316,12 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.bind("mouse:275", hl.dsp.window.close())
 
 -- Open desktop menu
-local menu = os.getenv("HOME") .. "/.config/hypr/scripts/desktop-menu.sh"
-hl.bind("mouse:273", hl.dsp.exec_cmd(menu), { non_consuming = true })
+--local menu = os.getenv("HOME") .. "/.config/hypr/scripts/desktop-menu.sh"
+--hl.bind("mouse:273", hl.dsp.exec_cmd(menu), { non_consuming = true })
 
 -- click outside an open fuzzel menu to dismiss it
-local dismiss = os.getenv("HOME") .. "/.config/hypr/scripts/menu-dismiss.sh"
-hl.bind("mouse:272", hl.dsp.exec_cmd("bash " .. dismiss), { non_consuming = true })
+--local dismiss = os.getenv("HOME") .. "/.config/hypr/scripts/menu-dismiss.sh"
+--hl.bind("mouse:272", hl.dsp.exec_cmd("bash " .. dismiss), { non_consuming = true })
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))

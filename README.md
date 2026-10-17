@@ -12,21 +12,25 @@ A purple-and-rose Hyprland rice with compact Waybar panels, matching SVG status 
 
 ![MewNix Candy power menu with SVG icons](Docs/screenshot1.png)
 
-### Application launcher
+### Desktop menu
 
-![MewNix Candy application launcher](Docs/screenshot2.png)
+![MewNix Candy desktop menu](Docs/screenshot2.png)
 
 ### Floating utility windows
 
-Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positioning and animations defined in `hyprland.lua`. Calcurse is shown below.
+Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positioning and animations defined in `hyprland.lua`. Calcurse and Bluetui are shown below.
 
 ![Calcurse showing the floating utility window layout](Docs/screenshot3.png)
 
-![Calcurse showing the floating utility window layout](Docs/screenshot4.png)
+![Bluetui Bluetooth manager in a floating utility window](Docs/screenshot4.png)
+
+### Application launcher
+
+![MewNix Candy application launcher](Docs/screenshot5.png)
 
 ### Hyprlock
 
-![MewNix Candy Hyprlock screen](Docs/screenshot5.png)
+![MewNix Candy Hyprlock screen](Docs/screenshot6.png)
 
 ## Included
 
@@ -34,7 +38,9 @@ Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positio
 - SVG icons for system stats, audio, network, Bluetooth, clock, and power.
 - Matching workspace indicators, subtle underline hovers, and a rose power button.
 - Hyprland, Hypridle, Hyprlock, launcher, notification, terminal-shell, and visualizer configuration.
-- Wallpapers and the `toggle-float` helper.
+- Shared wallpapers and the `toggle-float` helper.
+
+Personal wallpaper collections (`Wallpaper/Sus/`, `Wallpaper/Neo/`, and `Wallpaper/Goth/`) are excluded from Git. Screenshots may show wallpapers that are not included. Update wallpaper paths in `hyprpaper.conf` and `hyprlock.conf` to images on your own machine.
 
 ## Layout
 

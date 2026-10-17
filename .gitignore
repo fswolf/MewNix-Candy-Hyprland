@@ -1,0 +1,21 @@
+# Editor and desktop scratch files
+*~
+*.swp
+*.swo
+.DS_Store
+.Trash-*/
+
+# Local theme rollback copies
+backup-*/
+*.before-*
+
+sync.sh
+sync_rec.sh
+
+# Personal wallpaper collections (kept locally)
+/Wallpaper/Sus/
+/Wallpaper/Neo/
+/Wallpaper/Goth/
+
+# Locally generated artwork and prototypes
+/output/

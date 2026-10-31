@@ -1,0 +1,351 @@
+#!/usr/bin/env bash
+#
+# theme — one-command theme switcher for Hyprland.
+# Renders templates with envsubst and reloads the relevant daemons.
+#
+set -euo pipefail
+
+# ------------------------------------------------------------
+#  Paths
+# ------------------------------------------------------------
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
+TEMPLATES_DIR="$REPO_DIR/templates"
+THEMES_DIR="$REPO_DIR/themes"
+USER_CONFIG_DIR="$HOME/.config/hypr-themes"
+ACTIVE_LINK="$USER_CONFIG_DIR/.active"
+WALLPAPERS_CONF="$USER_CONFIG_DIR/wallpapers.conf"
+
+# ------------------------------------------------------------
+#  User config (WALLPAPER_DIR, DEFAULT_THEME, *_CONFIG_DIR)
+# ------------------------------------------------------------
+if [[ -f "$USER_CONFIG_DIR/config.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "$USER_CONFIG_DIR/config.sh"
+fi
+
+: "${WALLPAPER_DIR:=$HOME/Pictures/Wallpapers}"
+: "${DEFAULT_THEME:=peach}"
+: "${HYPR_CONFIG_DIR:=$HOME/.config/hypr}"
+: "${WOFI_CONFIG_DIR:=$HOME/.config/wofi}"
+: "${DUNST_CONFIG_DIR:=$HOME/.config/dunst}"
+
+# WALLPAPER_DIR is consumed by the hyprpaper template, so envsubst (which reads
+# the environment) needs it exported.
+export WALLPAPER_DIR
+
+# Explicit allowlist for envsubst. Only these expand; anything else in a
+# template (e.g. hyprlock's $FAIL / $ATTEMPTS) is left untouched.
+# Single quotes are intentional: envsubst needs the literal variable names, not
+# their values — so this must NOT expand here.
+# shellcheck disable=SC2016
+THEME_VARS='$ACCENT_HEX $BG_HEX $TEXT_HEX $BG_RGB $TEXT_RGB $ACCENT_PRIMARY $ACCENT_RGB $BORDER_COLOR_1 $BORDER_COLOR_2 $BORDER_ANGLE $GLOW_COLOR $BG_BASE_HEX $BG_BASE_RGB $BG_MANTLE_HEX $BG_MANTLE_RGB $BG_SURFACE0_HEX $BG_SURFACE1_HEX $FG_TEXT_HEX $FG_TEXT_RGB $FG_SUBTEXT0_HEX $COLOR_RED_HEX $COLOR_RED_RGB $COLOR_OVERLAY_HEX $WALLPAPER $WALLPAPER_DIR'
+
+# ------------------------------------------------------------
+#  Helpers
+# ------------------------------------------------------------
+
+# True only on a real interactive terminal — gates every prompt so install
+# scripts, keybinds and pipes keep the non-interactive behaviour.
+is_tty() { [[ -t 0 && -t 1 ]]; }
+
+# Shared path helpers: target_for, each_partial_target, each_base_target.
+# shellcheck source=/dev/null
+source "$REPO_DIR/lib/paths.sh"
+
+cmd_list() {
+    local f
+    for f in "$THEMES_DIR"/*.theme; do
+        [[ -e "$f" ]] || continue
+        basename "$f" .theme
+    done
+}
+
+cmd_current() {
+    if [[ -L "$ACTIVE_LINK" ]]; then
+        basename "$(readlink -f "$ACTIVE_LINK")" .theme
+    else
+        echo "none"
+    fi
+}
+
+# Image files at the top level of WALLPAPER_DIR, one per line.
+list_wallpapers() {
+    find "$WALLPAPER_DIR" -maxdepth 1 -type f \
+        \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) \
+        -printf '%f\n' 2>/dev/null | sort
+}
+
+# Per-user wallpaper override for a theme (empty if none). Always exits 0.
+wallpaper_override() {
+    local name="$1" line
+    [[ -f "$WALLPAPERS_CONF" ]] || return 0
+    line="$(grep -m1 "^${name}=" "$WALLPAPERS_CONF" 2>/dev/null || true)"
+    [[ -n "$line" ]] && printf '%s\n' "${line#*=}"
+    return 0
+}
+
+# Persist a per-user wallpaper choice (override file, never the repo theme).
+save_wallpaper_override() {
+    local name="$1" file="$2" tmp
+    mkdir -p "$USER_CONFIG_DIR"
+    if [[ -f "$WALLPAPERS_CONF" ]]; then
+        tmp="$(mktemp)"
+        grep -v "^${name}=" "$WALLPAPERS_CONF" > "$tmp" 2>/dev/null || true
+        mv "$tmp" "$WALLPAPERS_CONF"
+    fi
+    printf '%s=%s\n' "$name" "$file" >> "$WALLPAPERS_CONF"
+}
+
+# Interactive picker. Prompts/menus go to stderr; the chosen filename (if any)
+# is the only thing printed to stdout, so it can be captured with $(...).
+prompt_wallpaper() {
+    local name="$1" desc="$2" ans="" choice="" i
+    {
+        echo
+        echo "Theme '$name'${desc:+ — $desc}"
+        echo "No wallpaper found for this theme in $WALLPAPER_DIR."
+    } >&2
+    read -rp "Associate a wallpaper now? [Y/n] " ans || true
+    case "${ans,,}" in n|no) return 0 ;; esac
+
+    local imgs=()
+    mapfile -t imgs < <(list_wallpapers)
+    if (( ${#imgs[@]} == 0 )); then
+        echo "No image files in $WALLPAPER_DIR — skipping (check WALLPAPER_DIR in config.sh)." >&2
+        return 0
+    fi
+
+    {
+        echo "Images in $WALLPAPER_DIR:"
+        for i in "${!imgs[@]}"; do printf '  %2d) %s\n' "$((i + 1))" "${imgs[$i]}"; done
+    } >&2
+    read -rp "Choose a number, type a filename, or Enter to skip: " choice || true
+    [[ -z "$choice" ]] && return 0
+    if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#imgs[@]} )); then
+        printf '%s\n' "${imgs[$((choice - 1))]}"
+    elif [[ -f "$WALLPAPER_DIR/$choice" ]]; then
+        printf '%s\n' "$choice"
+    else
+        echo "Not found: $choice — skipping." >&2
+    fi
+    return 0
+}
+
+reload_daemons() {
+    python3 "$REPO_DIR/lib/runtime.py" "$theme"
+}
+
+cmd_apply() {
+    local theme="$1" no_prompt="${2:-}"
+    [[ "$theme" =~ ^[a-z0-9-]+$ ]] || { echo "Invalid theme name" >&2; return 1; }
+    local theme_file="$THEMES_DIR/${theme}.theme"
+
+    if [[ ! -f "$theme_file" ]]; then
+        echo "Error: theme '$theme' not found." >&2
+        echo "Available themes:" >&2
+        cmd_list >&2
+        exit 1
+    fi
+
+    # Export theme vars for envsubst.
+    set -a
+    # shellcheck source=/dev/null
+    source "$theme_file"
+    set +a
+
+    # Resolve the wallpaper: per-user override beats the theme default.
+    local wp="${WALLPAPER:-}" ov
+    ov="$(wallpaper_override "$theme")"
+    [[ -n "$ov" ]] && wp="$ov"
+
+    # If it's missing, offer to pick one (interactive only); otherwise keep
+    # the current wallpaper instead of writing a broken path.
+    local render_wp=0
+    if [[ "${MANAGE_WALLPAPER:-waypaper}" != waypaper && ( -z "$wp" || ! -f "$WALLPAPER_DIR/$wp" ) ]]; then
+        if is_tty && [[ "$no_prompt" != noprompt ]]; then
+            wp="$(prompt_wallpaper "$theme" "${THEME_DESCRIPTION:-}")"
+            if [[ -n "$wp" ]]; then
+                save_wallpaper_override "$theme" "$wp"
+            else
+                render_wp=0
+            fi
+        else
+            echo "Warning: wallpaper '${wp:-<none>}' not found in $WALLPAPER_DIR — keeping current wallpaper." >&2
+            render_wp=0
+        fi
+    fi
+    export WALLPAPER="$wp"
+
+    local count=0 tmpl rel target
+    while IFS= read -r tmpl; do
+        rel="${tmpl#"$TEMPLATES_DIR"/}"   # hypr/modules/config.lua.tmpl
+        rel="${rel%.tmpl}"                # hypr/modules/config.lua
+        target="$(target_for "$rel")"
+
+        # Skip the wallpaper config when there's no valid wallpaper to set.
+        if [[ "$target" == *"/hyprpaper.conf" && $render_wp -eq 0 ]]; then
+            continue
+        fi
+
+        mkdir -p "$(dirname "$target")"
+
+        # Pristine backup, created once, restored by uninstall.sh.
+        if [[ -f "$target" && ! -e "$target.orig" ]]; then
+            cp "$target" "$target.orig"
+        fi
+
+        # Render to a temp file, then validate/move atomically.
+        envsubst "$THEME_VARS" < "$tmpl" > "$target.tmp"
+
+        if [[ "$target" == *.lua ]] && command -v luac >/dev/null 2>&1 \
+            && ! luac -p "$target.tmp" 2>/dev/null; then
+            echo "Warning: generated $target is invalid Lua — keeping previous file." >&2
+            rm -f "$target.tmp"
+            continue
+        fi
+
+        mv "$target.tmp" "$target"
+        count=$((count + 1))
+    done < <(find "$TEMPLATES_DIR" -type f -name '*.tmpl' | sort)
+
+    mkdir -p "$USER_CONFIG_DIR"
+    if ! reload_daemons; then
+        echo "Theme reload failed; restoring the previous palette." >&2
+        local previous
+        previous="$(cmd_current)"
+        if [[ "$previous" != none && -f "$THEMES_DIR/$previous.theme" ]]; then
+            MEWNIX_RENDER_ONLY=1 "$REPO_DIR/bin/theme" "$previous" >/dev/null
+            hyprctl reload >/dev/null 2>&1 || true
+            makoctl reload >/dev/null 2>&1 || true
+        fi
+        return 1
+    fi
+    ln -sfn "$theme_file" "$ACTIVE_LINK"
+
+    echo "Theme: $theme ($count templates applied)"
+}
+
+# theme wallpaper [name] — (re)associate a wallpaper for a theme, then apply it.
+cmd_wallpaper() {
+    local theme="${1:-}"
+    [[ -z "$theme" ]] && theme="$(cmd_current)"
+    if [[ "$theme" == "none" || ! -f "$THEMES_DIR/${theme}.theme" ]]; then
+        echo "Usage: theme wallpaper <name>   (no valid theme given)" >&2
+        exit 1
+    fi
+    if ! is_tty; then
+        echo "Error: 'theme wallpaper' needs an interactive terminal." >&2
+        exit 1
+    fi
+
+    local THEME_DESCRIPTION=""
+    # shellcheck source=/dev/null
+    source "$THEMES_DIR/${theme}.theme"
+
+    local wp
+    wp="$(prompt_wallpaper "$theme" "${THEME_DESCRIPTION:-}")"
+    if [[ -n "$wp" ]]; then
+        save_wallpaper_override "$theme" "$wp"
+        echo "Wallpaper for '$theme' set to: $wp"
+        cmd_apply "$theme"
+    else
+        echo "No change."
+    fi
+}
+
+# Desktop notification of the applied theme (replaces its own previous one).
+notify_theme() {
+    if command -v dunstify >/dev/null 2>&1; then
+        dunstify -r 9001 -t 1500 "hypr-themes" "Applied: $1" >/dev/null 2>&1 || true
+    elif command -v notify-send >/dev/null 2>&1; then
+        notify-send -t 1500 "hypr-themes" "Applied: $1" >/dev/null 2>&1 || true
+    fi
+}
+
+# Looping Fuzzel picker: apply on pick and reopen, so you can browse several.
+# "keep" stays on the current one; "cancel" / Escape reverts to where you started.
+cmd_interactive() {
+    local start chosen cur changed=0 prompt
+    start="$(cmd_current)"
+    while true; do
+        cur="$(cmd_current)"
+        # The "keep" item and the revert hint only show once something changed —
+        # on first open there is nothing to keep or revert.
+        if (( changed )); then
+            prompt="theme (now: $cur) · Esc=revert"
+            chosen="$( { printf '%s\n' '✓ keep this theme'; cmd_list; } \
+                | fuzzel --dmenu --anchor center --x-margin 0 --y-margin 0 --keyboard-focus exclusive --prompt "$prompt: " --width 48 --lines 5 )" || chosen='__esc__'
+        else
+            prompt="theme (now: $cur)"
+            chosen="$( cmd_list | fuzzel --dmenu --anchor center --x-margin 0 --y-margin 0 --keyboard-focus exclusive --prompt "$prompt: " --width 48 --lines 5 )" || chosen='__esc__'
+        fi
+        case "$chosen" in
+            __esc__)
+                if (( changed )) && [[ "$start" != none && "$start" != "$(cmd_current)" ]]; then
+                    cmd_apply "$start" noprompt >/dev/null
+                fi
+                break ;;
+            '✓ keep this theme'|'') break ;;
+            *)
+                if [[ -f "$THEMES_DIR/${chosen}.theme" ]]; then
+                    cmd_apply "$chosen" noprompt >/dev/null
+                    notify_theme "$chosen"
+                    changed=1
+                fi ;;
+        esac
+    done
+}
+
+# Apply the next/previous theme in the (sorted) list, wrapping around.
+cmd_cycle() {
+    local dir="$1" themes=() i cur idx=0 n
+    mapfile -t themes < <(cmd_list)
+    n=${#themes[@]}
+    (( n == 0 )) && { echo "No themes found." >&2; exit 1; }
+    cur="$(cmd_current)"
+    for i in "${!themes[@]}"; do [[ "${themes[$i]}" == "$cur" ]] && idx="$i"; done
+    if [[ "$dir" == prev ]]; then idx=$(( (idx - 1 + n) % n )); else idx=$(( (idx + 1) % n )); fi
+    cmd_apply "${themes[$idx]}" noprompt
+    notify_theme "${themes[$idx]}"
+}
+
+cmd_help() {
+    cat <<'EOF'
+theme — one-command theme switcher for Hyprland
+
+Usage:
+  theme <name>          Apply the theme <name>
+  theme                 Looping picker (Fuzzel): browse, keep or revert
+  theme next            Apply the next theme (wraps); good for a keybind
+  theme prev            Apply the previous theme (wraps)
+  theme list            List available themes
+  theme current         Show the active theme
+  theme wallpaper [n]   Open Waypaper; wallpaper choices are remembered when switching
+  theme restore         Start both bars using the saved theme (login)
+  theme --help          Show this help
+EOF
+}
+
+# ------------------------------------------------------------
+#  Routing
+# ------------------------------------------------------------
+main() {
+    case "${1:-}" in
+        list)        cmd_list ;;
+        current)     cmd_current ;;
+        next)        cmd_cycle next ;;
+        prev)        cmd_cycle prev ;;
+        wallpaper)   exec waypaper ;;
+        restore)     python3 "$REPO_DIR/lib/runtime.py" --startup ;;
+        --help|-h)   cmd_help ;;
+        "")          cmd_interactive ;;
+        *)           cmd_apply "$1" ;;
+    esac
+}
+
+# Dispatch only when executed, not when sourced — so tests can source this file
+# for its functions without running a command.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi

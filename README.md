@@ -40,7 +40,7 @@ Bluetui, Wiremix, and Calcurse run in floating Kitty windows, with their positio
 - Hyprland, Hypridle, Hyprlock, launcher, notification, terminal-shell, and visualizer configuration.
 - Shared wallpapers and the `toggle-float` helper.
 
-Personal wallpaper collections (`Wallpaper/Sus/`, `Wallpaper/Neo/`, and `Wallpaper/Goth/`) are excluded from Git. Screenshots may show wallpapers that are not included. Update wallpaper paths in `hyprpaper.conf` and `hyprlock.conf` to images on your own machine.
+Personal wallpaper collections (`Wallpaper/Sus/`, `Wallpaper/Neo/`, and `Wallpaper/Goth/`) are excluded from Git. Screenshots may show wallpapers that are not included. Update the wallpaper paths in `[dot]local/share/mewnix-hypr-themes/themes/*.theme` to images on your own machine. Wallpaper images referenced by these presets are not bundled automatically.
 
 ## Layout
 
@@ -57,3 +57,24 @@ The Waybar audio, Bluetooth, and clock buttons toggle Wiremix, Bluetui, and Calc
 The included `toggle-float` script belongs in `~/.local/bin/` and takes a window class and a launch command. It checks for an existing window with that class: if one exists, it closes it; otherwise, it runs the launch command. This lets repeated clicks toggle the utility instead of opening extra copies. The script uses `hyprctl` and `jq`.
 
 Window rules in `[dot]config/hypr/hyprland.lua` match those Kitty window classes and control floating, size, position, and animation. For example, the `calcurse-float` rule creates a 900×600 floating window, centers it horizontally, places it 38 pixels from the top, and applies the `slide top` animation. The `toggle-float` script handles opening and closing; it does not switch windows between tiled and floating modes.
+
+
+## Theme selector
+
+Includes a MewNix adaptation of [hypr-themes](https://github.com/thenullstackdeveloper/hypr-themes), with its MIT license and source attribution. Copy both `[dot]config/` and `[dot]local/` to their corresponding home directories. The `.active` symlink is relative to the installed home-directory layout.
+
+Run `~/.local/bin/theme` for the centered Fuzzel picker, or apply a preset directly:
+
+```sh
+~/.local/bin/theme candy
+~/.local/bin/theme midnight-blue
+~/.local/bin/theme silver
+```
+
+The sfav configuration includes direct theme commands. The picker previews a selection; choose “keep this theme” to save it or Escape to revert. There is no theme keyboard shortcut or application-launcher entry.
+
+Edit `~/.local/share/mewnix-hypr-themes/themes/*.theme` for shared colors and wallpaper settings. `WALLPAPER_MAIN` targets DP-1 and `WALLPAPER_PORTRAIT` targets HDMI-A-1, for both desktop and Hyprlock. Optional `LOCK_WALLPAPER_MAIN` and `LOCK_WALLPAPER_PORTRAIT` override only the lock screen. Candy uses the midnight-plum landscape and portrait images; Midnight Blue uses the cyber-cat landscape and cyber-neon portrait images. Silver currently keeps its separate lock wallpaper pair and remembers its desktop selection through Waypaper.
+
+Waybar continues to use `style.css`, `style_midnight_blue.css`, and `style_silver.css`, including their SVG assets. Generated color partials cover Hyprland borders, Fuzzel, Wofi, Mako, and Hyprlock. Kitty is not controlled by the selector. Existing panel shapes, red power icons, and lock-screen geometry are preserved.
+
+The selector needs Bash, Python 3, `envsubst` (gettext), Fuzzel, Waypaper with swaybg, Waybar, Hyprland, and Mako. The Lua startup restores the selected Waybar style; Waypaper restores the saved desktop backgrounds. Wallpaper processes are detached from the launching terminal so they survive closing sfav.

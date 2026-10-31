@@ -19,3 +19,8 @@ sync_rec.sh
 
 # Locally generated artwork and prototypes
 /output/
+
+# Python runtime caches and generated rollback copies
+__pycache__/
+*.pyc
+*.orig

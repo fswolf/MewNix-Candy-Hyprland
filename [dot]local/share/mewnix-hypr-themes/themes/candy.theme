@@ -1,0 +1,15 @@
+THEME_NAME="candy"
+BG_HEX="1c0e28"
+BG_RGB="28, 14, 40"
+ACCENT_HEX="b48cdc"
+ACCENT_RGB="180, 140, 220"
+TEXT_HEX="e8e0f0"
+TEXT_RGB="232, 224, 240"
+BORDER_COLOR_1="rgba(8b6faeee)"
+BORDER_COLOR_2="rgba(c084f588)"
+BORDER_ANGLE="45"
+GLOW_COLOR="rgba(b48cdc80)"
+
+# Desktop and Hyprlock wallpapers: DP-1 and HDMI-A-1.
+WALLPAPER_MAIN="/home/ryan/Pictures/backgrounds/gpt/midnight-plum-1080p.png"
+WALLPAPER_PORTRAIT="/home/ryan/Pictures/backgrounds/gpt/midnight-plum-portrait.png"

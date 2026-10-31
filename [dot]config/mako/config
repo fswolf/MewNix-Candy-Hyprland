@@ -1,3 +1,4 @@
+include=~/.config/mako/mewnix-colors.conf
 # ============================================================
 # MAKO — Purple / Pink Waybar Theme
 # ============================================================
@@ -5,8 +6,6 @@
 # --- Global ---
 font=JetBrainsMono Nerd Font 11
 
-background-color=#1a1525f5
-text-color=#e8e0f0
 
 width=380
 height=100
@@ -17,7 +16,6 @@ outer-margin=4
 
 border-size=2
 border-radius=14
-border-color=#8b5cf6
 
 anchor=bottom-right
 
@@ -36,7 +34,6 @@ actions=1
 sort=-time
 
 # Progress bar
-progress-color=over #c084fc
 
 
 # ============================================================
@@ -44,9 +41,6 @@ progress-color=over #c084fc
 # ============================================================
 
 [urgency=normal]
-background-color=#1a1525f5
-text-color=#e8e0f0
-border-color=#8b5cf6
 border-size=2
 
 
@@ -55,9 +49,6 @@ border-size=2
 # ============================================================
 
 [urgency=low]
-background-color=#171321f5
-text-color=#c4b5fd
-border-color=#7c3aed
 border-size=1
 
 

@@ -57,14 +57,18 @@ local menu        = "wofi --show drun -I"
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
 --
- hl.on("hyprland.start", function () 
+hl.on("hyprland.start", function () 
     hl.exec_cmd("waypaper --restore")
 --    hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("waybar -c ~/.config/waybar/config-main")
-    hl.exec_cmd("waybar -c ~/.config/waybar/config-side")
+--    hl.exec_cmd("waybar -c ~/.config/waybar/config-main")
+--    hl.exec_cmd("waybar -c ~/.config/waybar/config-side")
 
+    -- Waybar startup is handled by the saved theme below.
+    -- Waybar startup is handled by the saved theme below.
     hl.exec_cmd("hyprmoncfgd")
     hl.exec_cmd("mako")
+    hl.exec_cmd("~/.local/bin/theme restore")
+
     
     hl.exec_cmd("hypridle")
     --hl.exec_cmd("swayidle -d -w")
@@ -135,8 +139,12 @@ hl.config({
         col = {
             active_border   = { 
             colors = {
-                "rgba(8b6faeee)",
-                "rgba(c084f588)"
+            --    "rgba(8b6faeee)", --candy
+            --    "rgba(c084f588)"  --candy
+            "rgba(39a99eee)", -- deep teal
+            "rgba(79c5b588)"  -- soft seafoam
+            --"rgba(d5dde7ee)", --silver
+            --"rgba(7f91a688)" --silver
             },
             angle = 45 },
             inactive_border = "rgba(595959aa)",
@@ -586,6 +594,58 @@ hl.workspace_rule({
     persistent = true,
     default = true,
 })
+
+------------------------------------------
+-- Blender Rule Set
+------------------------------------------
+-- Main window is "<file> - Blender 5.x". Every other Blender window
+-- (Preferences, File Browser/File View, Render, Info...) is a pop-up that
+-- gets crushed when tiled, so float + centre those. Later rules set sizes.
+
+-- 1. Main window: tiled
+hl.window_rule({
+    name  = "tile-blender-main",
+    match = { class = "^blender$", title = "^.* - Blender [0-9].*$" },
+    float = false,
+    tile  = true,
+})
+
+-- 2. Any other Blender window: float, centred
+hl.window_rule({
+    name   = "float-blender-popups",
+    match  = { class = "^blender$", title = "^(?!.* - Blender [0-9]).*$" },
+    float  = true,
+    size   = { 1280, 800 },
+    center = true,
+})
+
+-- 3. Preferences
+hl.window_rule({
+    name   = "size-blender-prefs",
+    match  = { class = "^blender$", title = "^(Blender )?Preferences$" },
+    size   = { 1100, 760 },
+})
+
+-- 4. File browser (opens as "File Browser", renames to "Blender File View")
+hl.window_rule({
+    name   = "size-blender-fileview",
+    match  = { class = "^blender$", title = "^(File Browser|Blender File View)$" },
+    size   = { 1280, 780 },
+})
+
+
+-- MewNix theme selector: colors only, loaded last to override the defaults.
+do
+    local path = os.getenv("HOME") .. "/.config/hypr/modules/theme.lua"
+    local file = io.open(path, "r")
+    if file then
+        file:close()
+        local theme = dofile(path)
+        hl.config({ general = { col = { active_border = {
+            colors = { theme.border_1, theme.border_2 }, angle = theme.border_angle
+        } } } })
+    end
+end
 
 -- Added by hyprmoncfg: its generated monitor rules load last, so nothing before this can override the applied layout.
 do local path = os.getenv("HOME") .. "/.config/hypr/hyprmoncfg-monitors.lua"; local file = io.open(path, "r"); if file then file:close(); dofile(path) end end

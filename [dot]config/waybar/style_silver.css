@@ -1,0 +1,353 @@
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 0;
+}
+
+/* ========== Main Bar ========== */
+window#waybar {
+    background: transparent;
+    margin: 0px; /* Forces the bar to the absolute top */
+    color: #edf1f5;
+}
+
+/* SVG edges are installed together with this stylesheet. */
+.modules-left,
+.modules-center,
+.modules-right {
+    background: rgba(21, 26, 34, 0.94);
+    background-clip: padding-box;
+    border-radius: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 1px 20px;
+    border-image-source: url("icons/panel-center-silver.svg");
+    border-image-slice: 1 20 1 20 fill;
+    border-image-width: 1px 20px;
+    border-image-repeat: stretch;
+    margin: 0;
+    padding: 0 3px;
+}
+.modules-left {
+    border-left-width: 0;
+    border-image-source: url("icons/panel-left-silver.svg");
+    border-image-slice: 1 20 1 0 fill;
+    border-image-width: 1px 20px 1px 0;
+}
+.modules-right {
+    border-right-width: 0;
+    border-image-source: url("icons/panel-right-silver.svg");
+    border-image-slice: 1 0 1 20 fill;
+    border-image-width: 1px 0 1px 20px;
+}
+
+/* ========== Right Modules ========== */
+#temperature,
+#cpu,
+#memory,
+#pulseaudio,
+#bluetooth,
+#network,
+#tray {
+    padding: 0 8px;
+    margin: 2px 2px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+#clock {
+    padding: 0 8px;
+    margin: 2px 0;
+    border-radius: 5px;
+    transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+/* ========== Module Dividers ========== */
+#memory,
+#bluetooth {
+    background-image: linear-gradient(
+        to bottom,
+        transparent 15%,
+        rgba(203, 213, 225, 0.45) 15%,
+        rgba(203, 213, 225, 0.45) 85%,
+        transparent 85%
+    );
+    background-position: right;
+    background-size: 1px 100%;
+    background-repeat: no-repeat;
+    padding-right: 14px;
+    margin-right: 4px;
+}
+
+/* ========== Tooltips / Calendar ========== */
+tooltip {
+    background: rgba(24, 29, 37, 0.97);
+    color: #edf1f5;
+    border-radius: 10px;
+    border: 1px solid rgba(203, 213, 225, 0.30);
+    padding: 8px 12px; 
+}
+
+tooltip label {
+    color: #edf1f5;
+}
+
+tooltip calendar {
+    background: transparent;
+    color: #edf1f5;
+}
+
+tooltip calendar.header {
+    color: #cbd5e1;
+    font-weight: bold;
+}
+
+tooltip calendar:selected {
+    background: rgba(203, 213, 225, 0.30);
+    border-radius: 6px;
+}
+
+tooltip calendar.highlight {
+    color: #edf1f5;
+    font-weight: bold;
+}
+
+/* ========== Workspaces ========== */
+#workspaces {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Keep the click targets roomy; draw indicators at a fixed circular size. */
+#workspaces button {
+    padding: 0;
+    margin: 2px 4px;
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 50%;
+    color: rgba(237, 241, 245, 0.45);
+    background: transparent;
+    border: 1px solid transparent;
+    transition: color 0.2s ease;
+}
+
+#workspaces button:hover {
+    color: #edf1f5;
+    background: transparent;
+    background-image: url("icons/workspace-hover-silver.svg");
+    background-size: 18px 18px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#workspaces button.active,
+#workspaces button.visible {
+    color: #ffffff;
+    background: transparent;
+    background-image: url("icons/workspace-active-silver.svg");
+    background-size: 18px 18px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* ========== New Workspace ========== */
+#custom-new-workspace {
+    padding: 0;
+    margin: 2px 4px;
+    min-width: 20px;
+    min-height: 20px;
+    color: rgba(237, 241, 245, 0.45);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+
+    /* Force perfect centering */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#custom-new-workspace label {
+    margin: 0;
+    padding: 0;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+#custom-new-workspace:hover {
+    color: #edf1f5;
+    background: transparent;
+    background-image: url("icons/workspace-hover-silver.svg");
+    background-size: 18px 18px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid transparent;
+}
+
+#tray image {
+    margin: 0 1px;
+}
+
+#temperature { color: #f38ba8; }
+#cpu         { color: #89dceb; }
+#memory      { color: #cbd5e1; }
+#pulseaudio  { color: #f9e2af; }
+#network     { color: #a6e3a1; }
+#bluetooth   { color: #89b4fa; }
+
+/* ===== Paw print ===== */
+#custom-paw {
+    background-image: url("icons/paws.svg");
+    color: #ffffff; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    min-width: 36px;
+    margin-left: 0px;  /* Pulled outward to the left edge */
+    margin-right: 0;  
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.85;
+}
+
+#custom-paw:hover {
+    background-image: url("icons/paws-blue.svg");
+    background-size: 20px; 
+}
+
+/* ========== Power Button ========== */
+#custom-power {
+    color: #eaa0bb;
+    min-width: 34px;
+    min-height: 0;
+    padding: 0;
+    margin: 3px 3px 3px 6px;
+    background: rgba(243, 139, 168, 0.04);
+    background-image: url("icons/power.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(234, 160, 187, 0.16);
+    box-shadow: none;
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+#custom-power:hover {
+    background-image: url("icons/power-hover.svg");
+    color: #ffe2ec;
+    background-color: rgba(243, 139, 168, 0.14);
+    border-color: rgba(243, 139, 168, 0.45);
+}
+
+#bluetooth.off,
+#bluetooth.no-controller,
+#bluetooth.disabled {
+    color: rgba(237, 241, 245, 0.35);
+    background-color: transparent;
+}
+
+#bluetooth.connected {
+    color: #cbd5e1;
+    border-color: rgba(203, 213, 225, 0.35);
+}
+
+
+
+/* Reset theme effects so the requested bar height can be honored. */
+#workspaces button {
+    text-shadow: none;
+    box-shadow: none;
+    background-image: none;
+}
+
+/* Quiet hover: a straight 1px underline, with no fill or text-color change.
+   Use background-color so the memory/Bluetooth dividers remain intact. */
+#clock,
+#temperature,
+#cpu,
+#memory,
+#pulseaudio,
+#network,
+#bluetooth {
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: inset 0 -1px transparent;
+    transition: box-shadow 120ms ease;
+}
+
+#clock:hover,
+#temperature:hover,
+#cpu:hover,
+#memory:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover {
+    background-color: transparent;
+    box-shadow: inset 0 -1px rgba(203, 213, 225, 0.55);
+}
+
+/* Tray icons retain their appearance when hovered. */
+#tray,
+#tray:hover,
+#tray > widget,
+#tray > widget:hover {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* Crisp status icons, centered independently of font metrics. */
+#temperature, #cpu, #memory, #pulseaudio, #bluetooth {
+    padding-left: 27px;
+    background-size: 16px 16px;
+    background-position: 6px center;
+    background-repeat: no-repeat;
+}
+#temperature { background-image: url("icons/status-temperature.svg"); }
+#temperature.critical { background-image: url("icons/status-temperature-critical.svg"); }
+#cpu { background-image: url("icons/status-cpu.svg"); }
+#memory { background-image: url("icons/status-memory-silver.svg"), linear-gradient(to bottom, transparent 15%, rgba(203, 213, 225, 0.45) 15%, rgba(203, 213, 225, 0.45) 85%, transparent 85%); }
+#pulseaudio { background-image: url("icons/status-audio.svg"); }
+#pulseaudio.muted { background-image: url("icons/status-audio-muted.svg"); }
+#pulseaudio.sink-muted { background-image: url("icons/status-audio-muted.svg"); }
+#bluetooth { background-image: url("icons/status-bluetooth.svg"), linear-gradient(to bottom, transparent 15%, rgba(203, 213, 225, 0.45) 15%, rgba(203, 213, 225, 0.45) 85%, transparent 85%); }
+#bluetooth.connected { background-image: url("icons/status-bluetooth-connected-silver.svg"), linear-gradient(to bottom, transparent 15%, rgba(203, 213, 225, 0.45) 15%, rgba(203, 213, 225, 0.45) 85%, transparent 85%); }
+#bluetooth.off,
+#bluetooth.no-controller,
+#bluetooth.disabled { background-image: url("icons/status-bluetooth-disabled.svg"), linear-gradient(to bottom, transparent 15%, rgba(203, 213, 225, 0.45) 15%, rgba(203, 213, 225, 0.45) 85%, transparent 85%); }
+#memory, #bluetooth {
+    background-position: 6px center, right center;
+    background-size: 16px 16px, 1px 100%;
+    background-repeat: no-repeat;
+}
+
+/* Clock icon matches the status SVG set. */
+#clock {
+    padding-left: 27px;
+    background-image: url("icons/status-clock-silver.svg");
+    background-size: 16px 16px;
+    background-position: 6px center;
+    background-repeat: no-repeat;
+}
+
+/* Network status alongside audio and Bluetooth. */
+#network {
+    padding-left: 27px;
+    background-image: url("icons/status-network-ethernet.svg");
+    background-size: 16px 16px;
+    background-position: 6px center;
+    background-repeat: no-repeat;
+}
+#network.wifi { background-image: url("icons/status-network-wifi.svg"); }
+#network.ethernet { background-image: url("icons/status-network-ethernet.svg"); }
+#network.linked {
+    color: #f9e2af;
+    background-image: url("icons/status-network-linked.svg");
+}
+#network.disconnected, #network.disabled {
+    color: #f38ba8;
+    background-image: url("icons/status-network-offline.svg");
+}

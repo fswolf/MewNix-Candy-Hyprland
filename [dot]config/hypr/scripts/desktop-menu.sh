@@ -64,7 +64,7 @@ menu_items() {
 
 case $(menu_items | fuzzel "${opts[@]}") in
   Terminal)  kitty & ;;
-  Files)     dolphine & ;;
+  Files)     dolphin & ;;
   Wallpaper) waypaper & ;;
   Displays)  kitty hyprmoncfg & ;;
   Reload)    hyprctl reload ;;

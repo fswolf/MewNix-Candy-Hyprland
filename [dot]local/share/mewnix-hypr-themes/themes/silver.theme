@@ -1,0 +1,15 @@
+THEME_NAME="silver"
+BG_HEX="151a22"
+BG_RGB="21, 26, 34"
+ACCENT_HEX="cbd5e1"
+ACCENT_RGB="203, 213, 225"
+TEXT_HEX="edf1f5"
+TEXT_RGB="237, 241, 245"
+BORDER_COLOR_1="rgba(d5dde7ee)"
+BORDER_COLOR_2="rgba(7f91a688)"
+BORDER_ANGLE="45"
+GLOW_COLOR="rgba(cbd5e180)"
+
+# Hyprlock only; desktop retains its remembered Waypaper selection.
+LOCK_WALLPAPER_MAIN="/home/ryan/Pictures/backgrounds/gpt/midnight-plum-1080p.png"
+LOCK_WALLPAPER_PORTRAIT="/home/ryan/Pictures/backgrounds/Neo/background2.png"

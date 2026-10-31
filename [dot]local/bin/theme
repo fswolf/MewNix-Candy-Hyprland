@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec "$HOME/.local/share/mewnix-hypr-themes/bin/theme" "$@"

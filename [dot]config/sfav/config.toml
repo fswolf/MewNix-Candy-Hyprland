@@ -25,9 +25,19 @@ command = "hyprctl reload"
 notes = "Reload hyprland config"
 
 [[entries]]
-name = "Waybar reload"
-command = "killall waybar; setsid -f waybar -c ~/.config/waybar/config-main >/dev/null 2>&1 & setsid -f waybar -c ~/.config/waybar/config-side >/dev/null 2>&1 &"
-notes = "Reload waybar with config"
+name = "Theme — Candy"
+command = "theme candy"
+notes = "Apply the Candy theme"
+
+[[entries]]
+name = "Theme — Midnight Blue"
+command = "theme midnight-blue"
+notes = "Apply the Midnight Blue theme"
+
+[[entries]]
+name = "Theme — Silver"
+command = "theme silver"
+notes = "Apply the Silver theme"
 
 [[entries]]
 name = "Audio Setting"
@@ -45,19 +55,9 @@ command = "bluetui"
 notes = "Terminal based bluetooth manager"
 
 [[entries]]
-name = "ComfyUI"
-command = "source ~/comfyui-venv/bin/activate && comfy launch"
-notes = "ComfyUI image generator"
-
-[[entries]]
-name = "VoicePipeLine"
-command = "source ~/ai-voice-venv/bin/activate && python ~/ai-voice/voice_loop_kokoro.py"
-notes = "Streaming voice pipe line experemental doesnt work great"
-
-[[entries]]
-name = "Luna AI"
-command = "source ~/ai-voice-venv/bin/activate && python ~/ai-voice/main.py"
-notes = "Launch AI voice assistant broken on hyprland"
+name = "Calander"
+command = "calcurse"
+notes = "Terminal base Calander"
 
 [[entries]]
 name = "Music Player"
@@ -85,6 +85,37 @@ command = "cbonsai"
 notes = "Terminal growing bomzi tree"
 
 [[entries]]
-name = "Mako Test"
-command = "notify-send -u normal \"Test Title\" \"This is a test notification\""
-notes = "Test Mako message demon"
+name = "MUD Client"
+command = "blightmud"
+notes = "TUI MUD Client writen in rust with tss support."
+
+[[entries]]
+name = "ComfyUI"
+command = "source ~/comfyui-venv/bin/activate && comfy launch"
+notes = "ComfyUI image generator"
+
+[[entries]]
+name = "Luna AI"
+command = "/home/ryan/ai-voice/start.sh"
+notes = "Experemental AI voice assistant."
+
+[[entries]]
+name = "Zork"
+command = "dfrotz ~/ai-voice/games/zork/zork1.z3"
+notes = "Zork the amazing text adventure."
+
+
+[[entries]]
+name = "Kokoro TTS Server"
+command = '"/home/ryan/Kokoro TTS FireFox/server/start_server.sh"'
+notes = "Kokoro TTS server for firefox and mudlet"
+
+[[entries]]
+name = "VoicePipeLine"
+command = "source ~/ai-voice-venv/bin/activate && python ~/ai-voice/voice_loop_kokoro.py"
+notes = "Streaming voice pipe line experemental doesnt work great"
+
+[[entries]]
+name = "Update ChatGpt"
+command = "sudo dnf upgrade --refresh chatgpt"
+notes = "Force update ChatGpt package"

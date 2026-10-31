@@ -1,7 +1,8 @@
+@import url("/home/ryan/.config/wofi/mewnix-colors.css");
 window {
     margin: 0px;
-    border: 2px solid rgba(180, 140, 220, 0.5);
-    background-color: rgba(28, 14, 40, 0.95);
+    border-style: solid;
+    border-width: 2px;
     border-radius: 14px;
     font-family: "JetBrainsMono Nerd Font";
 }
@@ -11,7 +12,6 @@ window {
     border: none;
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.08);
-    color: #e8e0f0;
     padding: 8px 12px;
 }
 
@@ -27,12 +27,9 @@ window {
 }
 
 #entry:selected {
-    background-color: rgba(180, 140, 220, 0.35);
-    color: #ffffff;
 }
 
 #text {
-    color: #e8e0f0;
     margin-left: 10px;
 }
 

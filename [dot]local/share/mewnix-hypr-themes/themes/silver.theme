@@ -10,6 +10,6 @@ BORDER_COLOR_2="rgba(7f91a688)"
 BORDER_ANGLE="45"
 GLOW_COLOR="rgba(cbd5e180)"
 
-# Hyprlock only; desktop retains its remembered Waypaper selection.
-LOCK_WALLPAPER_MAIN="/home/ryan/Pictures/backgrounds/gpt/midnight-plum-1080p.png"
-LOCK_WALLPAPER_PORTRAIT="/home/ryan/Pictures/backgrounds/Neo/background2.png"
+# Desktop and Hyprlock wallpapers: DP-1 and HDMI-A-1.
+WALLPAPER_MAIN="/home/ryan/Pictures/backgrounds/gpt/silver-cat-orbital-v1.png"
+WALLPAPER_PORTRAIT="/home/ryan/Pictures/backgrounds/gpt/silver-orbital-portrait.png"

@@ -71,9 +71,9 @@ Run `~/.local/bin/theme` for the centered Fuzzel picker, or apply a preset direc
 ~/.local/bin/theme silver
 ```
 
-The sfav configuration includes direct theme commands. The picker previews a selection; choose “keep this theme” to save it or Escape to revert. There is no theme keyboard shortcut or application-launcher entry.
+The sfav configuration includes direct theme commands. The picker previews a selection; choose “keep this theme” to save it or Escape to revert. Super + Shift + T opens the theme selector. There is no application-launcher entry.
 
-Edit `~/.local/share/mewnix-hypr-themes/themes/*.theme` for shared colors and wallpaper settings. `WALLPAPER_MAIN` targets DP-1 and `WALLPAPER_PORTRAIT` targets HDMI-A-1, for both desktop and Hyprlock. Optional `LOCK_WALLPAPER_MAIN` and `LOCK_WALLPAPER_PORTRAIT` override only the lock screen. Candy uses the midnight-plum landscape and portrait images; Midnight Blue uses the cyber-cat landscape and cyber-neon portrait images. Silver currently keeps its separate lock wallpaper pair and remembers its desktop selection through Waypaper.
+Edit `~/.local/share/mewnix-hypr-themes/themes/*.theme` for shared colors and wallpaper settings. `WALLPAPER_MAIN` targets DP-1 and `WALLPAPER_PORTRAIT` targets HDMI-A-1, for both desktop and Hyprlock. Optional `LOCK_WALLPAPER_MAIN` and `LOCK_WALLPAPER_PORTRAIT` override only the lock screen. Candy uses the midnight-plum landscape and portrait images; Midnight Blue uses the cyber-cat landscape and cyber-neon portrait images. Silver uses its orbital landscape and portrait pair for both desktop and Hyprlock.
 
 Waybar continues to use `style.css`, `style_midnight_blue.css`, and `style_silver.css`, including their SVG assets. Generated color partials cover Hyprland borders, Fuzzel, Wofi, Mako, and Hyprlock. Kitty is not controlled by the selector. Existing panel shapes, red power icons, and lock-screen geometry are preserved.
 

@@ -11,5 +11,5 @@ BORDER_ANGLE="45"
 GLOW_COLOR="rgba(b48cdc80)"
 
 # Desktop and Hyprlock wallpapers: DP-1 and HDMI-A-1.
-WALLPAPER_MAIN="/home/ryan/Pictures/backgrounds/gpt/midnight-plum-1080p.png"
-WALLPAPER_PORTRAIT="/home/ryan/Pictures/backgrounds/gpt/midnight-plum-portrait.png"
+WALLPAPER_MAIN="/home/ryan/Pictures/backgrounds/gpt/candy-cat-observatory-v1.png"
+WALLPAPER_PORTRAIT="/home/ryan/Pictures/backgrounds/gpt/candy-observatory-extension-portrait.png"
